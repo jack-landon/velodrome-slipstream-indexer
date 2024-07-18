@@ -10,15 +10,15 @@
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickLower",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickUpper",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": false,
@@ -59,15 +59,15 @@
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickLower",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickUpper",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": false,
@@ -183,9 +183,9 @@
       },
       {
         "indexed": false,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tick",
-        "type": "int24"
+        "type": "int32"
       }
     ],
     "name": "Initialize",
@@ -208,15 +208,15 @@
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickLower",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": true,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tickUpper",
-        "type": "int24"
+        "type": "int32"
       },
       {
         "indexed": false,
@@ -312,9 +312,9 @@
       },
       {
         "indexed": false,
-        "internalType": "int24",
+        "internalType": "int32",
         "name": "tick",
-        "type": "int24"
+        "type": "int32"
       }
     ],
     "name": "Swap",
@@ -322,8 +322,8 @@
   },
   {
     "inputs": [
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       { "internalType": "uint128", "name": "amount", "type": "uint128" },
       { "internalType": "address", "name": "owner", "type": "address" }
     ],
@@ -337,8 +337,8 @@
   },
   {
     "inputs": [
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       { "internalType": "uint128", "name": "amount", "type": "uint128" }
     ],
     "name": "burn",
@@ -352,8 +352,8 @@
   {
     "inputs": [
       { "internalType": "address", "name": "recipient", "type": "address" },
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       {
         "internalType": "uint128",
         "name": "amount0Requested",
@@ -377,8 +377,8 @@
   {
     "inputs": [
       { "internalType": "address", "name": "recipient", "type": "address" },
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       {
         "internalType": "uint128",
         "name": "amount0Requested",
@@ -474,8 +474,8 @@
   },
   {
     "inputs": [
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       {
         "internalType": "uint256",
         "name": "_rewardGrowthGlobalX128",
@@ -511,7 +511,7 @@
       { "internalType": "address", "name": "_factory", "type": "address" },
       { "internalType": "address", "name": "_token0", "type": "address" },
       { "internalType": "address", "name": "_token1", "type": "address" },
-      { "internalType": "int24", "name": "_tickSpacing", "type": "int24" },
+      { "internalType": "int32", "name": "_tickSpacing", "type": "int32" },
       {
         "internalType": "address",
         "name": "_factoryRegistry",
@@ -548,8 +548,8 @@
   {
     "inputs": [
       { "internalType": "address", "name": "recipient", "type": "address" },
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       { "internalType": "uint128", "name": "amount", "type": "uint128" },
       { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
@@ -675,7 +675,7 @@
     "name": "slot0",
     "outputs": [
       { "internalType": "uint160", "name": "sqrtPriceX96", "type": "uint160" },
-      { "internalType": "int24", "name": "tick", "type": "int24" },
+      { "internalType": "int32", "name": "tick", "type": "int32" },
       {
         "internalType": "uint16",
         "name": "observationIndex",
@@ -698,8 +698,8 @@
   },
   {
     "inputs": [
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" }
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" }
     ],
     "name": "snapshotCumulativesInside",
     "outputs": [
@@ -725,8 +725,8 @@
         "name": "stakedLiquidityDelta",
         "type": "int128"
       },
-      { "internalType": "int24", "name": "tickLower", "type": "int24" },
-      { "internalType": "int24", "name": "tickUpper", "type": "int24" },
+      { "internalType": "int32", "name": "tickLower", "type": "int32" },
+      { "internalType": "int32", "name": "tickUpper", "type": "int32" },
       { "internalType": "bool", "name": "positionUpdate", "type": "bool" }
     ],
     "name": "stake",
@@ -786,12 +786,12 @@
   {
     "inputs": [],
     "name": "tickSpacing",
-    "outputs": [{ "internalType": "int24", "name": "", "type": "int24" }],
+    "outputs": [{ "internalType": "int32", "name": "", "type": "int32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "int24", "name": "", "type": "int24" }],
+    "inputs": [{ "internalType": "int32", "name": "", "type": "int32" }],
     "name": "ticks",
     "outputs": [
       {

@@ -37,55 +37,46 @@ export function safeDiv(amount0: BigDecimal, amount1: BigDecimal): BigDecimal {
   }
 }
 
+// return 0 if denominator is 0 in division
+export function safeDivNumber(amount0: number, amount1: number): number {
+  if (amount1 == 0) {
+    return 0;
+  } else {
+    return amount0 / amount1;
+  }
+}
+
 /**
  * Implements exponentiation by squaring
  * (see https://en.wikipedia.org/wiki/Exponentiation_by_squaring )
  * to minimize the number of BigDecimal operations and their impact on performance.
  */
-export function fastExponentiation(
-  value: BigDecimal,
-  power: BigDecimal
-): BigDecimal {
-  console.log(
-    `Starting fastExponentiation... Value: ${value}, Power: ${power}`
-  );
-  if (power.lt(BigDecimal(0))) {
-    console.log(`Power Below 0`);
-    const result = fastExponentiation(value, power.absoluteValue());
-    console.log(`Power Below 0... Result = ${result}`);
-    // console.log(`Power Below 0... About to return = ${safeDiv(ONE_BD, result)}`);
-    console.log(`Power Below 0... About to return`);
-    return safeDiv(ONE_BD, result);
+export function fastExponentiation(value: number, power: number): number {
+  if (power < 0) {
+    const result = fastExponentiation(value, Math.abs(power));
+    return safeDivNumber(1, result);
   }
 
-  if (power.eq(BigDecimal(0))) {
-    console.log(`fastExponentiation.. power = 0 about to return ONE_BD`);
-    return ONE_BD;
+  if (power == 0) {
+    return 1;
   }
 
-  if (power.eq(BigDecimal(1))) {
-    console.log(`fastExponentiation.. power = 1 about to return value`);
+  if (power == 1) {
     return value;
   }
 
-  const halfPower = power.div(2);
-  const halfResult = fastExponentiation(value, halfPower.decimalPlaces(18));
+  const halfPower = Math.floor(power / 2);
+  const halfResult = fastExponentiation(value, halfPower);
 
   // Use the fact that x ^ (2n) = (x ^ n) * (x ^ n) and we can compute (x ^ n) only once.
-  let result = halfResult
-    .decimalPlaces(18)
-    .times(halfResult.decimalPlaces(18))
-    .decimalPlaces(18);
-
-  console.log(`fastExponentiation.. Result = ${result}`);
+  let result = halfResult * halfResult;
 
   // For odd powers, x ^ (2n + 1) = (x ^ 2n) * x
-  if (power.mod(BigDecimal(2)).eq(BigDecimal(1))) {
-    result = result.decimalPlaces(18).times(value.decimalPlaces(18));
+  if (power % 2 == 1) {
+    result = result * value;
   }
 
-  console.log(`fastExponentiation End: ${result.decimalPlaces(18)}`);
-  return result.decimalPlaces(18);
+  return result;
 }
 
 export function bigDecimalExponated(

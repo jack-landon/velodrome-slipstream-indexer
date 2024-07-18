@@ -40,10 +40,9 @@ export function createTick(
 
   // let price0 = bigDecimalExponated(BigDecimal("1.0001"), tickIdx);
 
-  const price0 = fastExponentiation(
-    BigDecimal("1.0001"),
-    BigDecimal(tickIdx.toString())
-  ).decimalPlaces(18);
+  const price0 = BigDecimal(
+    fastExponentiation(1.0001, parseInt(tickIdx.toString()))
+  );
 
   console.log(`THE PRICE0 IS ${price0.toString()}`);
 
