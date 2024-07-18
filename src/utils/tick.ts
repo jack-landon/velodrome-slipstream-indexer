@@ -4,7 +4,7 @@ import {
   CLPoolContract_MintEvent_eventArgs,
   eventLog,
 } from "generated";
-import { fastExponentiation, safeDiv } from ".";
+import { bigDecimalExponated, fastExponentiation, safeDiv } from ".";
 import { ONE_BD, ZERO_BI } from "./constants";
 
 export function createTick(
@@ -14,6 +14,12 @@ export function createTick(
   timestamp: number,
   blockNumber: number
 ): TickEntity {
+  console.log(`tickId: ${tickId}`);
+  console.log(`tickIds: ${tickIdx}`);
+  console.log(`poolId: ${poolId}`);
+  console.log(`timestamp: ${timestamp}`);
+  console.log(`blockNumber: ${blockNumber}`);
+
   let tick: TickEntity = {
     id: tickId,
     tickIdx: tickIdx,
@@ -28,16 +34,35 @@ export function createTick(
   };
 
   // 1.0001^tick is token1/token0.
+  // const price0 = BigDecimal("1.0001")
+  //   .pow(BigDecimal(tickIdx.toString()))
+  //   .decimalPlaces(18);
+
+  // let price0 = bigDecimalExponated(BigDecimal("1.0001"), tickIdx);
+
   const price0 = fastExponentiation(
     BigDecimal("1.0001"),
-    parseInt(tickIdx.toString())
-  );
+    BigDecimal(tickIdx.toString())
+  ).decimalPlaces(18);
+
+  console.log(`THE PRICE0 IS ${price0.toString()}`);
+
+  const price1 = safeDiv(ONE_BD, price0).decimalPlaces(18);
+
+  console.log(`THE PRICE1 IS ${price1.toString()}`);
+
+  console.log(`Price0: ${price0.toString()}`);
 
   tick = {
     ...tick,
-    price0: price0,
-    price1: safeDiv(ONE_BD, price0),
+    price0,
+    price1,
   };
+
+  console.log(`tick: ${tick}`);
+
+  console.log(`tickPrice0: ${tick.price0}`);
+  console.log(`tickPrice1: ${tick.price1}`);
 
   return tick;
 }

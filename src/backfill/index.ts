@@ -1,7 +1,6 @@
 import {
   PoolEntity,
   CLFactoryContract_PoolCreatedEvent_handlerContextAsync,
-  CLPoolContract_InitializeEvent_handlerContextAsync,
   CLPoolContract_SwapEvent_handlerContextAsync,
 } from "generated";
 import { convertTokenToDecimal } from "../utils";

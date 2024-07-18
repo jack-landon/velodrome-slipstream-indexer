@@ -21,11 +21,12 @@ import { poolAbi } from "./utils/abis";
 import { findNativePerToken } from "./utils/pricing";
 
 CLFactoryContract.PoolCreated.loader(({ event, context }) => {
-  context.Factory.load(BASE_FACTORY_CONTRACT);
+  // context.Factory.load(BASE_FACTORY_CONTRACT);
   context.contractRegistration.addCLPool(event.params.pool);
 });
 
 CLFactoryContract.PoolCreated.handlerAsync(async ({ event, context }) => {
+  context.log.info("Starting a Factory Pool Add");
   const subgraphConfig = getSubgraphConfig(event.chainId);
   const whitelistTokens = subgraphConfig.whitelistTokens;
   const tokenOverrides = subgraphConfig.tokenOverrides;

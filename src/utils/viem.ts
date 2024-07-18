@@ -37,7 +37,7 @@ export const publicClients = {
   }),
   8453: createPublicClient({
     chain: base,
-    transport: http("http://lax1.backbone.to:8705"),
+    transport: http(),
   }),
   56: createPublicClient({
     chain: bsc,

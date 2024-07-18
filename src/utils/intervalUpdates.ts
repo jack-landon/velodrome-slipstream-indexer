@@ -8,14 +8,9 @@ import {
   TokenEntity,
   TokenHourDataEntity,
   UniswapDayDataEntity,
-  CLPoolContract_BurnEvent_handlerContext,
   CLPoolContract_BurnEvent_handlerContextAsync,
-  CLPoolContract_CollectEvent_handlerContext,
   CLPoolContract_CollectEvent_handlerContextAsync,
-  CLPoolContract_InitializeEvent_handlerContextAsync,
-  CLPoolContract_MintEvent_handlerContext,
   CLPoolContract_MintEvent_handlerContextAsync,
-  CLPoolContract_SwapEvent_handlerContext,
   CLPoolContract_SwapEvent_handlerContextAsync,
 } from "generated";
 import { ONE_BI, ZERO_BD, ZERO_BI } from "./constants";
@@ -84,7 +79,6 @@ export function updatePoolDayData(
     | CLPoolContract_CollectEvent_handlerContextAsync
     | CLPoolContract_MintEvent_handlerContextAsync
     | CLPoolContract_SwapEvent_handlerContextAsync
-    | CLPoolContract_InitializeEvent_handlerContextAsync
 ): PoolDayDataEntity {
   const dayStartTimestamp = getDayStartTimestamp(dayID);
   const dayPoolID = pool.id.concat("-").concat(dayID.toString());
@@ -151,7 +145,6 @@ export function updatePoolHourData(
     | CLPoolContract_CollectEvent_handlerContextAsync
     | CLPoolContract_MintEvent_handlerContextAsync
     | CLPoolContract_SwapEvent_handlerContextAsync
-    | CLPoolContract_InitializeEvent_handlerContextAsync
 ): PoolHourDataEntity {
   const hourIndex = getHourIndex(timestamp); // get unique hour within unix history
   const hourStartUnix = getHourStartUnix(hourIndex); // want the rounded effect

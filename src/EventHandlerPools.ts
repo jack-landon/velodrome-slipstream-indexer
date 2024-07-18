@@ -33,38 +33,36 @@ import {
 } from "./utils/intervalUpdates";
 import { createTick } from "./utils/tick";
 
-// CLPoolContract.Burn.loader(({ event, context }) => {
-//   const poolAddress = event.srcAddress;
-//   const lowerTickId =
-//     poolAddress + "#" + BigInt(event.params.tickLower).toString();
-//   const upperTickId =
-//     poolAddress + "#" + BigInt(event.params.tickUpper).toString();
-
-//   context.Tick.load(lowerTickId, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-//   context.Tick.load(upperTickId, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-//   context.Bundle.load(event.chainId.toString());
-
-//   const dayID = getDayID(event.blockTimestamp);
-//   context.UniswapDayData.load(dayID.toString());
-
-//   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-//   context.PoolDayData.load(dayPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-
-//   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
-//   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
-//   context.PoolHourData.load(hourPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-// });
+CLPoolContract.Burn.loader(({ event, context }) => {
+  //   const poolAddress = event.srcAddress;
+  //   const lowerTickId =
+  //     poolAddress + "#" + BigInt(event.params.tickLower).toString();
+  //   const upperTickId =
+  //     poolAddress + "#" + BigInt(event.params.tickUpper).toString();
+  //   context.Tick.load(lowerTickId, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+  //   context.Tick.load(upperTickId, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+  //   context.Bundle.load(event.chainId.toString());
+  //   const dayID = getDayID(event.blockTimestamp);
+  //   context.UniswapDayData.load(dayID.toString());
+  //   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
+  //   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  //   context.PoolDayData.load(dayPoolID, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+  //   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
+  //   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
+  //   context.PoolHourData.load(hourPoolID, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+});
 
 CLPoolContract.Burn.handlerAsync(async ({ event, context }) => {
+  context.log.info("Starting a Burn");
+
   const factoryAddress = getFactoryAddress(event.chainId);
 
   let [bundle, pool, factory] = await Promise.all([
@@ -256,27 +254,26 @@ CLPoolContract.Burn.handlerAsync(async ({ event, context }) => {
   }
 });
 
-// CLPoolContract.Collect.loader(({ event, context }) => {
-//   context.Bundle.load(event.chainId.toString());
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-
-//   const dayID = getDayID(event.blockTimestamp);
-//   context.UniswapDayData.load(dayID.toString());
-
-//   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-//   context.PoolDayData.load(dayPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-
-//   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
-//   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
-//   context.PoolHourData.load(hourPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-// });
+CLPoolContract.Collect.loader(({ event, context }) => {
+  //   context.Bundle.load(event.chainId.toString());
+  //   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  //   const dayID = getDayID(event.blockTimestamp);
+  //   context.UniswapDayData.load(dayID.toString());
+  //   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
+  //   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  //   context.PoolDayData.load(dayPoolID, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+  //   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
+  //   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
+  //   context.PoolHourData.load(hourPoolID, {
+  //     loadPool: { loadToken0: true, loadToken1: true },
+  //   });
+});
 
 CLPoolContract.Collect.handlerAsync(async ({ event, context }) => {
+  context.log.info("Starting a Collect");
+
   const subgraphConfig = getSubgraphConfig(event.chainId);
   const factoryAddress = getFactoryAddress(event.chainId);
 
@@ -587,40 +584,37 @@ CLPoolContract.Collect.handlerAsync(async ({ event, context }) => {
 //   }
 // });
 
-// CLPoolContract.Mint.loader(({ event, context }) => {
-//   context.Bundle.load(event.chainId.toString());
-//   context.Factory.load(getFactoryAddress(event.chainId));
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-
-//   const lowerTickId =
-//     event.srcAddress + "#" + BigInt(event.params.tickLower).toString();
-//   const upperTickId =
-//     event.srcAddress + "#" + BigInt(event.params.tickUpper).toString();
-
-//   context.Tick.load(lowerTickId, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-//   context.Tick.load(upperTickId, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-
-//   const dayID = getDayID(event.blockTimestamp);
-//   context.UniswapDayData.load(dayID.toString());
-
-//   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-//   context.PoolDayData.load(dayPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-
-//   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
-//   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
-//   context.PoolHourData.load(hourPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-// });
+CLPoolContract.Mint.loader(({ event, context }) => {
+  // context.Bundle.load(event.chainId.toString());
+  // context.Factory.load(getFactoryAddress(event.chainId));
+  // context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  // const lowerTickId =
+  //   event.srcAddress + "#" + BigInt(event.params.tickLower).toString();
+  // const upperTickId =
+  //   event.srcAddress + "#" + BigInt(event.params.tickUpper).toString();
+  // context.Tick.load(lowerTickId, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+  // context.Tick.load(upperTickId, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+  // const dayID = getDayID(event.blockTimestamp);
+  // context.UniswapDayData.load(dayID.toString());
+  // const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
+  // context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  // context.PoolDayData.load(dayPoolID, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+  // const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
+  // const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
+  // context.PoolHourData.load(hourPoolID, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+});
 
 CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
+  context.log.info("Starting a Mint");
+
   const factoryAddress = getFactoryAddress(event.chainId);
 
   let [bundle, pool, factory] = await Promise.all([
@@ -630,17 +624,18 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
   ]);
 
   if (!bundle) {
-    return context.log.error(`Bundle not found for chain ${event.chainId}`);
+    context.log.error(`Bundle not found for chain ${event.chainId}`);
+    return;
   }
 
   if (!pool || !pool.token0_id || !pool.token1_id) {
-    return context.log.error(
-      `Pool or Pool ID's not found for chain ${event.chainId}`
-    );
+    context.log.error(`Pool or Pool ID's not found for chain ${event.chainId}`);
+    return;
   }
 
   if (!factory) {
-    return context.log.error(`Factory not found for chain ${event.chainId}`);
+    context.log.error(`Factory not found for chain ${event.chainId}`);
+    return;
   }
 
   const lowerTickId =
@@ -661,7 +656,13 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     context.Tick.get(upperTickId),
   ]);
 
+  context.log.info(
+    `Mint Token 0: ${token0?.symbol}....Mint Token 1: ${token1?.symbol}`
+  );
+
   if (token0 && token1) {
+    context.log.info(`Mint converting to decimal`);
+
     const amount0 = convertTokenToDecimal(
       event.params.amount0,
       token0.decimals
@@ -671,9 +672,13 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       token1.decimals
     );
 
+    context.log.info(`Mint successfully converted to decimal`);
+
     const amountUSD = amount0
       .times(token0.derivedETH.times(bundle.ethPriceUSD))
       .plus(amount1.times(token1.derivedETH.times(bundle.ethPriceUSD)));
+
+    context.log.info(`Mint AmountUSD ${amountUSD}`);
 
     // reset tvl aggregates until new amounts calculated
     factory = {
@@ -761,7 +766,8 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     };
 
     if (!pool.token0_id || !pool.token1_id) {
-      return context.log.error(`Pool Tokens ID's not found in Mint Event`);
+      context.log.error(`Pool Tokens ID's not found in Mint Event`);
+      return;
     }
 
     let mint: MintEntity = {
@@ -788,6 +794,8 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     const upperTickIdx = event.params.tickUpper;
 
     if (!lowerTick) {
+      context.log.info(`Mint Creating Lower tick`);
+
       lowerTick = createTick(
         lowerTickId,
         lowerTickIdx,
@@ -798,6 +806,8 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     }
 
     if (!upperTick) {
+      context.log.info(`Mint Creating Upper tick`);
+
       upperTick = createTick(
         upperTickId,
         upperTickIdx,
@@ -820,6 +830,9 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       liquidityNet: upperTick.liquidityNet - amount,
     };
 
+    context.log.info(`Mint Before all the tick sets ${lowerTick.id}`);
+    context.log.info(`Mint Before all the tick sets ${upperTick.id}`);
+
     context.Tick.set(lowerTick);
     context.Tick.set(upperTick);
 
@@ -829,12 +842,13 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     const dayID = getDayID(event.blockTimestamp);
     const dayPoolID = pool.id.concat("-").concat(dayID.toString());
     const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
-    const hourStartUnix = getHourStartUnix(hourIndex); // want the rounded effect
     const hourPoolID = pool.id.concat("-").concat(hourIndex.toString());
     const tokenDayID0 = token0.id.concat("-").concat(dayID.toString());
     const tokenDayID1 = token1.id.concat("-").concat(dayID.toString());
     const tokenHourID0 = token0.id.concat("-").concat(hourIndex.toString());
     const tokenHourID1 = token1.id.concat("-").concat(hourIndex.toString());
+
+    context.log.info(`Mint Before all the period gets`);
 
     let [
       uniswapDayData,
@@ -853,6 +867,8 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       context.TokenHourData.get(tokenHourID0),
       context.TokenHourData.get(tokenHourID1),
     ]);
+
+    context.log.info(`Mint Before all the updates`);
 
     updateUniswapDayData(dayID, factory, uniswapDayData, context);
     updatePoolDayData(dayID, pool, poolDayData, context);
@@ -874,42 +890,48 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       context
     );
 
+    context.log.info(`Mint Before all the settings`);
+    context.log.info(`Mint token0 ${token0}`);
+    context.log.info(`Mint token1 ${token1}`);
+    context.log.info(`Mint poo ${pool}`);
+    context.log.info(`Mint factory ${factory}`);
+    context.log.info(`Mint mint ${mint}`);
+
     context.Token.set(token0);
     context.Token.set(token1);
     context.Pool.set(pool);
     context.Factory.set(factory);
     context.Mint.set(mint);
+    context.log.info(`End of Mint ${event.blockNumber}`);
   }
 });
 
-// CLPoolContract.Swap.loader(({ event, context }) => {
-//   const subgraphConfig = getSubgraphConfig(event.chainId);
-
-//   context.Bundle.load(event.chainId.toString());
-//   context.Factory.load(getFactoryAddress(event.chainId));
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-//   context.Pool.load(subgraphConfig.stablecoinWrappedNativePoolAddress, {
-//     loadToken0: true,
-//     loadToken1: true,
-//   });
-
-//   const dayID = getDayID(event.blockTimestamp);
-//   context.UniswapDayData.load(dayID.toString());
-
-//   const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
-//   context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
-//   context.PoolDayData.load(dayPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-
-//   const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
-//   const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
-//   context.PoolHourData.load(hourPoolID, {
-//     loadPool: { loadToken0: true, loadToken1: true },
-//   });
-// });
+CLPoolContract.Swap.loader(({ event, context }) => {
+  // const subgraphConfig = getSubgraphConfig(event.chainId);
+  // context.Bundle.load(event.chainId.toString());
+  // context.Factory.load(getFactoryAddress(event.chainId));
+  // context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  // context.Pool.load(subgraphConfig.stablecoinWrappedNativePoolAddress, {
+  //   loadToken0: true,
+  //   loadToken1: true,
+  // });
+  // const dayID = getDayID(event.blockTimestamp);
+  // context.UniswapDayData.load(dayID.toString());
+  // const dayPoolID = event.srcAddress.concat("-").concat(dayID.toString());
+  // context.Pool.load(event.srcAddress, { loadToken0: true, loadToken1: true });
+  // context.PoolDayData.load(dayPoolID, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+  // const hourIndex = getHourIndex(event.blockTimestamp); // get unique hour within unix history
+  // const hourPoolID = event.srcAddress.concat("-").concat(hourIndex.toString());
+  // context.PoolHourData.load(hourPoolID, {
+  //   loadPool: { loadToken0: true, loadToken1: true },
+  // });
+});
 
 CLPoolContract.Swap.handlerAsync(async ({ event, context }) => {
+  context.log.info("Starting a Swap");
+
   const factoryAddress = getFactoryAddress(event.chainId);
   const subgraphConfig = getSubgraphConfig(event.chainId);
 

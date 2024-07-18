@@ -8,9 +8,8 @@ import {
 } from "generated";
 import {
   BASE_FACTORY_CONTRACT,
-  BASE_MAINNET_ID,
-  ETH_MAINNET_ID,
   ONE_BD,
+  ONE_BI,
   ZERO_BD,
   ZERO_BI,
 } from "../utils/constants";
@@ -45,31 +44,68 @@ export function safeDiv(amount0: BigDecimal, amount1: BigDecimal): BigDecimal {
  */
 export function fastExponentiation(
   value: BigDecimal,
-  power: number
+  power: BigDecimal
 ): BigDecimal {
-  if (power < 0) {
-    const result = fastExponentiation(value, -power);
+  console.log(
+    `Starting fastExponentiation... Value: ${value}, Power: ${power}`
+  );
+  if (power.lt(BigDecimal(0))) {
+    console.log(`Power Below 0`);
+    const result = fastExponentiation(value, power.absoluteValue());
+    console.log(`Power Below 0... Result = ${result}`);
+    // console.log(`Power Below 0... About to return = ${safeDiv(ONE_BD, result)}`);
+    console.log(`Power Below 0... About to return`);
     return safeDiv(ONE_BD, result);
   }
 
-  if (power == 0) {
+  if (power.eq(BigDecimal(0))) {
+    console.log(`fastExponentiation.. power = 0 about to return ONE_BD`);
     return ONE_BD;
   }
 
-  if (power == 1) {
+  if (power.eq(BigDecimal(1))) {
+    console.log(`fastExponentiation.. power = 1 about to return value`);
     return value;
   }
 
-  const halfPower = power / 2;
-  const halfResult = fastExponentiation(value, halfPower);
+  const halfPower = power.div(2);
+  const halfResult = fastExponentiation(value, halfPower.decimalPlaces(18));
 
   // Use the fact that x ^ (2n) = (x ^ n) * (x ^ n) and we can compute (x ^ n) only once.
-  let result = halfResult.times(halfResult);
+  let result = halfResult
+    .decimalPlaces(18)
+    .times(halfResult.decimalPlaces(18))
+    .decimalPlaces(18);
+
+  console.log(`fastExponentiation.. Result = ${result}`);
 
   // For odd powers, x ^ (2n + 1) = (x ^ 2n) * x
-  if (power % 2 == 1) {
+  if (power.mod(BigDecimal(2)).eq(BigDecimal(1))) {
+    result = result.decimalPlaces(18).times(value.decimalPlaces(18));
+  }
+
+  console.log(`fastExponentiation End: ${result.decimalPlaces(18)}`);
+  return result.decimalPlaces(18);
+}
+
+export function bigDecimalExponated(
+  value: BigDecimal,
+  power: bigint
+): BigDecimal {
+  if (power == ZERO_BI) {
+    return ONE_BD;
+  }
+  let negativePower = power < ZERO_BI;
+  let result = ZERO_BD.plus(value);
+  let powerAbs = power < 0n ? -power : power;
+  for (let i = ONE_BI; i < powerAbs; i = i + ONE_BI) {
     result = result.times(value);
   }
+
+  if (negativePower) {
+    result = safeDiv(ONE_BD, result);
+  }
+
   return result;
 }
 

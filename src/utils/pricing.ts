@@ -1,7 +1,7 @@
 import {
   BigDecimal,
   BundleEntity,
-  CLPoolContract_InitializeEvent_handlerContextAsync,
+  CLFactoryContract_PoolCreatedEvent_handlerContextAsync,
   CLPoolContract_SwapEvent_handlerContextAsync,
   PoolEntity,
   TokenEntity,
@@ -62,7 +62,7 @@ export async function findNativePerToken(
   bundle: BundleEntity,
   context:
     | CLPoolContract_SwapEvent_handlerContextAsync
-    | CLPoolContract_InitializeEvent_handlerContextAsync
+    | CLFactoryContract_PoolCreatedEvent_handlerContextAsync
 ): Promise<BigDecimal> {
   if (token.id == wrappedNativeAddress) {
     return ONE_BD;

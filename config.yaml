@@ -6,8 +6,6 @@ contracts:
     events:
       - event: PoolCreated(address indexed token0, address indexed token1, int24 indexed tickSpacing, address pool)
         isAsync: true
-      - event: TickSpacingEnabled(int24 indexed tickSpacing, uint24 indexed fee)
-        isAsync: true
   - name: CLPool
     abi_file_path: src/abis/poolAbi.json
     handler: src/EventHandlerPools.ts
@@ -16,25 +14,13 @@ contracts:
         isAsync: true
       - event: Collect(address indexed owner, address recipient, int24 indexed tickLower, int24 indexed tickUpper, uint128 amount0, uint128 amount1)
         isAsync: true
-      - event: CollectFees(address indexed recipient, uint128 amount0, uint128 amount1)
-        isAsync: true
-      - event: Flash(address indexed sender, address indexed recipient, uint256 amount0, uint256 amount1, uint256 paid0, uint256 paid1)
-        isAsync: true
-      - event: IncreaseObservationCardinalityNext(uint16 observationCardinalityNextOld, uint16 observationCardinalityNextNew)
-        isAsync: true
-      - event: Initialize(uint160 sqrtPriceX96, int24 tick)
-        isAsync: true
       - event: Mint(address sender, address indexed owner, int24 indexed tickLower, int24 indexed tickUpper, uint128 amount, uint256 amount0, uint256 amount1)
-        isAsync: true
-      - event: SetFeeProtocol(uint8 feeProtocol0Old, uint8 feeProtocol1Old, uint8 feeProtocol0New, uint8 feeProtocol1New)
         isAsync: true
       - event: Swap(address indexed sender, address indexed recipient, int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick)
         isAsync: true
 networks:
   - id: 8453
-    rpc_config:
-      url: https://base.rpc.hypersync.xyz
-    start_block: 13843704
+    start_block: 13843700
     contracts:
       - name: CLFactory
         address:
