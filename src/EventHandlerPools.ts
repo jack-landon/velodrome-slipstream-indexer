@@ -32,6 +32,8 @@ import {
   updateUniswapDayData,
 } from "./utils/intervalUpdates";
 import { createTick } from "./utils/tick";
+import { publicClients } from "./utils/viem";
+import { poolAbi } from "./utils/abis";
 
 CLPoolContract.Burn.loader(({ event, context }) => {
   //   const poolAddress = event.srcAddress;
@@ -61,8 +63,6 @@ CLPoolContract.Burn.loader(({ event, context }) => {
 });
 
 CLPoolContract.Burn.handlerAsync(async ({ event, context }) => {
-  context.log.info("Starting a Burn");
-
   const factoryAddress = getFactoryAddress(event.chainId);
 
   let [bundle, pool, factory] = await Promise.all([
@@ -226,9 +226,67 @@ CLPoolContract.Burn.handlerAsync(async ({ event, context }) => {
       context.TokenHourData.get(tokenHourID1),
     ]);
 
+    let feeGrowthGlobal0X128: bigint | undefined = undefined;
+    let feeGrowthGlobal1X128: bigint | undefined = undefined;
+
+    if (!poolHourData) {
+      // Call for feeGrowthGlobal0X128 and feeGrowthGlobal1X128
+      const poolContract = {
+        address: event.srcAddress as `0x${string}`,
+        abi: poolAbi,
+      } as const;
+
+      const results = await publicClients[
+        event.chainId as keyof typeof publicClients
+      ].multicall({
+        contracts: [
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal0X128",
+          },
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal1X128",
+          },
+        ],
+        blockNumber: BigInt(event.blockNumber),
+      });
+
+      feeGrowthGlobal0X128 = results[0].result;
+      feeGrowthGlobal1X128 = results[1].result;
+
+      if (feeGrowthGlobal0X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal0X128,
+        };
+      }
+
+      if (feeGrowthGlobal1X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal1X128,
+        };
+      }
+    }
+
     updateUniswapDayData(dayID, factory, uniswapDayData, context);
-    updatePoolDayData(dayID, pool, poolDayData, context);
-    updatePoolHourData(event.blockTimestamp, pool, poolHourData, context);
+    updatePoolDayData(
+      dayID,
+      pool,
+      poolDayData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
+      context
+    );
+    updatePoolHourData(
+      event.blockTimestamp,
+      pool,
+      poolHourData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
+      context
+    );
     updateTokenDayData(token0, bundle, dayID, tokenDayData0, context);
     updateTokenDayData(token1, bundle, dayID, tokenDayData1, context);
     updateTokenHourData(
@@ -272,8 +330,6 @@ CLPoolContract.Collect.loader(({ event, context }) => {
 });
 
 CLPoolContract.Collect.handlerAsync(async ({ event, context }) => {
-  context.log.info("Starting a Collect");
-
   const subgraphConfig = getSubgraphConfig(event.chainId);
   const factoryAddress = getFactoryAddress(event.chainId);
 
@@ -446,9 +502,67 @@ CLPoolContract.Collect.handlerAsync(async ({ event, context }) => {
     context.TokenHourData.get(tokenHourID1),
   ]);
 
+  let feeGrowthGlobal0X128: bigint | undefined = undefined;
+  let feeGrowthGlobal1X128: bigint | undefined = undefined;
+
+  if (!poolHourData) {
+    // Call for feeGrowthGlobal0X128 and feeGrowthGlobal1X128
+    const poolContract = {
+      address: event.srcAddress as `0x${string}`,
+      abi: poolAbi,
+    } as const;
+
+    const results = await publicClients[
+      event.chainId as keyof typeof publicClients
+    ].multicall({
+      contracts: [
+        {
+          ...poolContract,
+          functionName: "feeGrowthGlobal0X128",
+        },
+        {
+          ...poolContract,
+          functionName: "feeGrowthGlobal1X128",
+        },
+      ],
+      blockNumber: BigInt(event.blockNumber),
+    });
+
+    feeGrowthGlobal0X128 = results[0].result;
+    feeGrowthGlobal1X128 = results[1].result;
+
+    if (feeGrowthGlobal0X128) {
+      pool = {
+        ...pool,
+        feeGrowthGlobal0X128,
+      };
+    }
+
+    if (feeGrowthGlobal1X128) {
+      pool = {
+        ...pool,
+        feeGrowthGlobal1X128,
+      };
+    }
+  }
+
   updateUniswapDayData(dayID, factory, uniswapDayData, context);
-  updatePoolDayData(dayID, pool, poolDayData, context);
-  updatePoolHourData(event.blockTimestamp, pool, poolHourData, context);
+  updatePoolDayData(
+    dayID,
+    pool,
+    poolDayData,
+    feeGrowthGlobal0X128,
+    feeGrowthGlobal1X128,
+    context
+  );
+  updatePoolHourData(
+    event.blockTimestamp,
+    pool,
+    poolHourData,
+    feeGrowthGlobal0X128,
+    feeGrowthGlobal1X128,
+    context
+  );
   updateTokenDayData(token0, bundle, dayID, tokenDayData0, context);
   updateTokenDayData(token1, bundle, dayID, tokenDayData1, context);
   updateTokenHourData(
@@ -613,8 +727,6 @@ CLPoolContract.Mint.loader(({ event, context }) => {
 });
 
 CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
-  context.log.info("Starting a Mint");
-
   const factoryAddress = getFactoryAddress(event.chainId);
 
   let [bundle, pool, factory] = await Promise.all([
@@ -656,13 +768,7 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     context.Tick.get(upperTickId),
   ]);
 
-  context.log.info(
-    `Mint Token 0: ${token0?.symbol}....Mint Token 1: ${token1?.symbol}`
-  );
-
   if (token0 && token1) {
-    context.log.info(`Mint converting to decimal`);
-
     const amount0 = convertTokenToDecimal(
       event.params.amount0,
       token0.decimals
@@ -672,13 +778,9 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       token1.decimals
     );
 
-    context.log.info(`Mint successfully converted to decimal`);
-
     const amountUSD = amount0
       .times(token0.derivedETH.times(bundle.ethPriceUSD))
       .plus(amount1.times(token1.derivedETH.times(bundle.ethPriceUSD)));
-
-    context.log.info(`Mint AmountUSD ${amountUSD}`);
 
     // reset tvl aggregates until new amounts calculated
     factory = {
@@ -794,8 +896,6 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     const upperTickIdx = event.params.tickUpper;
 
     if (!lowerTick) {
-      context.log.info(`Mint Creating Lower tick`);
-
       lowerTick = createTick(
         lowerTickId,
         lowerTickIdx,
@@ -806,8 +906,6 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     }
 
     if (!upperTick) {
-      context.log.info(`Mint Creating Upper tick`);
-
       upperTick = createTick(
         upperTickId,
         upperTickIdx,
@@ -830,9 +928,6 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       liquidityNet: upperTick.liquidityNet - amount,
     };
 
-    context.log.info(`Mint Before all the tick sets ${lowerTick.id}`);
-    context.log.info(`Mint Before all the tick sets ${upperTick.id}`);
-
     context.Tick.set(lowerTick);
     context.Tick.set(upperTick);
 
@@ -847,8 +942,6 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
     const tokenDayID1 = token1.id.concat("-").concat(dayID.toString());
     const tokenHourID0 = token0.id.concat("-").concat(hourIndex.toString());
     const tokenHourID1 = token1.id.concat("-").concat(hourIndex.toString());
-
-    context.log.info(`Mint Before all the period gets`);
 
     let [
       uniswapDayData,
@@ -868,11 +961,67 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       context.TokenHourData.get(tokenHourID1),
     ]);
 
-    context.log.info(`Mint Before all the updates`);
+    let feeGrowthGlobal0X128: bigint | undefined = undefined;
+    let feeGrowthGlobal1X128: bigint | undefined = undefined;
+
+    if (!poolHourData) {
+      // Call for feeGrowthGlobal0X128 and feeGrowthGlobal1X128
+      const poolContract = {
+        address: event.srcAddress as `0x${string}`,
+        abi: poolAbi,
+      } as const;
+
+      const results = await publicClients[
+        event.chainId as keyof typeof publicClients
+      ].multicall({
+        contracts: [
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal0X128",
+          },
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal1X128",
+          },
+        ],
+        blockNumber: BigInt(event.blockNumber),
+      });
+
+      feeGrowthGlobal0X128 = results[0].result;
+      feeGrowthGlobal1X128 = results[1].result;
+
+      if (feeGrowthGlobal0X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal0X128,
+        };
+      }
+
+      if (feeGrowthGlobal1X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal1X128,
+        };
+      }
+    }
 
     updateUniswapDayData(dayID, factory, uniswapDayData, context);
-    updatePoolDayData(dayID, pool, poolDayData, context);
-    updatePoolHourData(event.blockTimestamp, pool, poolHourData, context);
+    updatePoolDayData(
+      dayID,
+      pool,
+      poolDayData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
+      context
+    );
+    updatePoolHourData(
+      event.blockTimestamp,
+      pool,
+      poolHourData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
+      context
+    );
     updateTokenDayData(token0, bundle, dayID, tokenDayData0, context);
     updateTokenDayData(token1, bundle, dayID, tokenDayData1, context);
     updateTokenHourData(
@@ -890,19 +1039,11 @@ CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
       context
     );
 
-    context.log.info(`Mint Before all the settings`);
-    context.log.info(`Mint token0 ${token0}`);
-    context.log.info(`Mint token1 ${token1}`);
-    context.log.info(`Mint poo ${pool}`);
-    context.log.info(`Mint factory ${factory}`);
-    context.log.info(`Mint mint ${mint}`);
-
     context.Token.set(token0);
     context.Token.set(token1);
     context.Pool.set(pool);
     context.Factory.set(factory);
     context.Mint.set(mint);
-    context.log.info(`End of Mint ${event.blockNumber}`);
   }
 });
 
@@ -930,8 +1071,6 @@ CLPoolContract.Swap.loader(({ event, context }) => {
 });
 
 CLPoolContract.Swap.handlerAsync(async ({ event, context }) => {
-  context.log.info("Starting a Swap");
-
   const factoryAddress = getFactoryAddress(event.chainId);
   const subgraphConfig = getSubgraphConfig(event.chainId);
 
@@ -1234,17 +1373,70 @@ CLPoolContract.Swap.handlerAsync(async ({ event, context }) => {
       context.TokenHourData.get(tokenHourID1),
     ]);
 
+    let feeGrowthGlobal0X128: bigint | undefined = undefined;
+    let feeGrowthGlobal1X128: bigint | undefined = undefined;
+
+    if (!_poolHourData) {
+      // Call for feeGrowthGlobal0X128 and feeGrowthGlobal1X128
+      const poolContract = {
+        address: event.srcAddress as `0x${string}`,
+        abi: poolAbi,
+      } as const;
+
+      const results = await publicClients[
+        event.chainId as keyof typeof publicClients
+      ].multicall({
+        contracts: [
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal0X128",
+          },
+          {
+            ...poolContract,
+            functionName: "feeGrowthGlobal1X128",
+          },
+        ],
+        blockNumber: BigInt(event.blockNumber),
+      });
+
+      feeGrowthGlobal0X128 = results[0].result;
+      feeGrowthGlobal1X128 = results[1].result;
+
+      if (feeGrowthGlobal0X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal0X128,
+        };
+      }
+
+      if (feeGrowthGlobal1X128) {
+        pool = {
+          ...pool,
+          feeGrowthGlobal1X128,
+        };
+      }
+    }
+
     let uniswapDayData = updateUniswapDayData(
       dayID,
       factory,
       _uniswapDayData,
       context
     );
-    let poolDayData = updatePoolDayData(dayID, pool, _poolDayData, context);
+    let poolDayData = updatePoolDayData(
+      dayID,
+      pool,
+      _poolDayData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
+      context
+    );
     let poolHourData = updatePoolHourData(
       event.blockTimestamp,
       pool,
       _poolHourData,
+      feeGrowthGlobal0X128,
+      feeGrowthGlobal1X128,
       context
     );
     let token0DayData = updateTokenDayData(

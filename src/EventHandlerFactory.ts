@@ -88,20 +88,12 @@ CLFactoryContract.PoolCreated.handlerAsync(async ({ event, context }) => {
     }),
   ]);
 
-  context.log.info(
-    `About to Call tickSpacing for address ${event.params.pool}`
-  );
-
-  context.log.info(
-    `TickSpacing is ${tickSpacing} for Pool ${event.params.pool}`
-  );
-
   let pool: PoolEntity = {
     id: event.params.pool,
     token0_id: event.params.token0,
     token1_id: event.params.token1,
-    feeTier: feeTier as bigint,
-    tickSpacing: tickSpacing as bigint,
+    feeTier: feeTier as unknown as bigint,
+    tickSpacing: tickSpacing as unknown as bigint,
     createdAtTimestamp: event.blockTimestamp,
     createdAtBlockNumber: event.blockNumber,
     liquidityProviderCount: ZERO_BI,
@@ -120,6 +112,8 @@ CLFactoryContract.PoolCreated.handlerAsync(async ({ event, context }) => {
     volumeToken1: ZERO_BD,
     volumeUSD: ZERO_BD,
     feesUSD: ZERO_BD,
+    feeGrowthGlobal0X128: ZERO_BI,
+    feeGrowthGlobal1X128: ZERO_BI,
     untrackedVolumeUSD: ZERO_BD,
     collectedFeesToken0: ZERO_BD,
     collectedFeesToken1: ZERO_BD,

@@ -95,7 +95,7 @@ export async function fetchTokenDecimals(
     address,
     abi: erc20Abi,
     functionName: "decimals",
-  })) as bigint;
+  })) as unknown as bigint;
 
   return parseInt(decimals.toString()) ?? null;
 }
