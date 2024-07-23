@@ -6,13 +6,8 @@ import {
   SwapEntity,
   CLPoolContract,
 } from "generated";
-import { ONE_BI, ZERO_BD, ZERO_BI } from "./utils/constants";
-import {
-  convertTokenToDecimal,
-  getFactoryAddress,
-  loadTransaction,
-  safeDiv,
-} from "./utils";
+import { ONE_BI, ZERO_BD } from "./utils/constants";
+import { convertTokenToDecimal, loadTransaction, safeDiv } from "./utils";
 import {
   findNativePerToken,
   getNativePriceInUSD,
