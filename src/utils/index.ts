@@ -6,17 +6,7 @@ import {
   CLPoolContract_MintEvent_handlerContextAsync,
   CLPoolContract_SwapEvent_handlerContextAsync,
 } from "generated";
-import {
-  BASE_FACTORY_CONTRACT,
-  ONE_BD,
-  ONE_BI,
-  ZERO_BD,
-  ZERO_BI,
-} from "../utils/constants";
-
-export function getFactoryAddress(chainId: number) {
-  return BASE_FACTORY_CONTRACT;
-}
+import { ONE_BD, ONE_BI, ZERO_BD, ZERO_BI } from "../utils/constants";
 
 export function exponentToBigDecimal(decimals: number): BigDecimal {
   let resultString = "1";

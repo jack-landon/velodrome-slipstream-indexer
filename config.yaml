@@ -19,12 +19,21 @@ contracts:
       - event: Swap(address indexed sender, address indexed recipient, int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick)
         isAsync: true
 networks:
-  - id: 8453
-    start_block: 13843700
+  - id: 10 # Optimism
+    start_block: 121501000
     contracts:
       - name: CLFactory
         address:
-          - 0x5e7BB104d84c7CB9B682AaC2F3d509f5F406809A
+          - 0xCc0bDDB707055e04e497aB22a59c2aF4391cd12F
       - name: CLPool
         address:
+# networks:
+#   - id: 8453 # BASE
+#     start_block: 13843700
+#     contracts:
+#       - name: CLFactory
+#         address:
+#           - 0x5e7BB104d84c7CB9B682AaC2F3d509f5F406809A
+#       - name: CLPool
+#         address:
 event_decoder: viem

@@ -14,12 +14,6 @@ export function createTick(
   timestamp: number,
   blockNumber: number
 ): TickEntity {
-  console.log(`tickId: ${tickId}`);
-  console.log(`tickIds: ${tickIdx}`);
-  console.log(`poolId: ${poolId}`);
-  console.log(`timestamp: ${timestamp}`);
-  console.log(`blockNumber: ${blockNumber}`);
-
   let tick: TickEntity = {
     id: tickId,
     tickIdx: tickIdx,
@@ -44,24 +38,13 @@ export function createTick(
     fastExponentiation(1.0001, parseInt(tickIdx.toString()))
   );
 
-  console.log(`THE PRICE0 IS ${price0.toString()}`);
-
   const price1 = safeDiv(ONE_BD, price0).decimalPlaces(18);
-
-  console.log(`THE PRICE1 IS ${price1.toString()}`);
-
-  console.log(`Price0: ${price0.toString()}`);
 
   tick = {
     ...tick,
     price0,
     price1,
   };
-
-  console.log(`tick: ${tick}`);
-
-  console.log(`tickPrice0: ${tick.price0}`);
-  console.log(`tickPrice1: ${tick.price1}`);
 
   return tick;
 }

@@ -25,13 +25,17 @@ export async function fetchTokenSymbol(
 
   if (!isAddress(address)) return "UNKNOWN";
 
-  const symbol = (await publicClients[chainId].readContract({
-    address,
-    abi: erc20Abi,
-    functionName: "symbol",
-  })) as string;
+  try {
+    const symbol = (await publicClients[chainId].readContract({
+      address,
+      abi: erc20Abi,
+      functionName: "symbol",
+    })) as string;
 
-  return symbol ?? "UNKNOWN";
+    return symbol ?? "UNKNOWN";
+  } catch (error) {
+    return "UNKNOWN";
+  }
 }
 
 export async function fetchTokenName(
@@ -47,13 +51,17 @@ export async function fetchTokenName(
 
   if (!isAddress(address)) return "UNKNOWN";
 
-  const name = (await publicClients[chainId].readContract({
-    address,
-    abi: erc20Abi,
-    functionName: "name",
-  })) as string;
+  try {
+    const name = (await publicClients[chainId].readContract({
+      address,
+      abi: erc20Abi,
+      functionName: "name",
+    })) as string;
 
-  return name ?? "UNKNOWN";
+    return name ?? "UNKNOWN";
+  } catch (error) {
+    return "UNKNOWN";
+  }
 }
 
 export async function fetchTokenTotalSupply(
@@ -69,13 +77,17 @@ export async function fetchTokenTotalSupply(
 
   if (!isAddress(address)) return 0n;
 
-  const totalSupply = (await publicClients[chainId].readContract({
-    address,
-    abi: erc20Abi,
-    functionName: "totalSupply",
-  })) as bigint;
+  try {
+    const totalSupply = (await publicClients[chainId].readContract({
+      address,
+      abi: erc20Abi,
+      functionName: "totalSupply",
+    })) as bigint;
 
-  return totalSupply ?? 0n;
+    return totalSupply ?? 0n;
+  } catch (error) {
+    return 0n;
+  }
 }
 
 export async function fetchTokenDecimals(
@@ -91,11 +103,15 @@ export async function fetchTokenDecimals(
 
   if (!isAddress(address)) return null;
 
-  const decimals = (await publicClients[chainId].readContract({
-    address,
-    abi: erc20Abi,
-    functionName: "decimals",
-  })) as unknown as bigint;
+  try {
+    const decimals = (await publicClients[chainId].readContract({
+      address,
+      abi: erc20Abi,
+      functionName: "decimals",
+    })) as unknown as bigint;
 
-  return parseInt(decimals.toString()) ?? null;
+    return parseInt(decimals.toString()) ?? null;
+  } catch (error) {
+    return null;
+  }
 }

@@ -63,7 +63,8 @@ CLPoolContract.Burn.loader(({ event, context }) => {
 });
 
 CLPoolContract.Burn.handlerAsync(async ({ event, context }) => {
-  const factoryAddress = getFactoryAddress(event.chainId);
+  const subgraphConfig = getSubgraphConfig(event.chainId);
+  const factoryAddress = subgraphConfig.factoryAddress;
 
   let [bundle, pool, factory] = await Promise.all([
     context.Bundle.get(event.chainId.toString())!,
@@ -331,7 +332,7 @@ CLPoolContract.Collect.loader(({ event, context }) => {
 
 CLPoolContract.Collect.handlerAsync(async ({ event, context }) => {
   const subgraphConfig = getSubgraphConfig(event.chainId);
-  const factoryAddress = getFactoryAddress(event.chainId);
+  const factoryAddress = subgraphConfig.factoryAddress;
 
   const whitelistTokens = subgraphConfig.whitelistTokens;
 
@@ -727,7 +728,8 @@ CLPoolContract.Mint.loader(({ event, context }) => {
 });
 
 CLPoolContract.Mint.handlerAsync(async ({ event, context }) => {
-  const factoryAddress = getFactoryAddress(event.chainId);
+  const subgraphConfig = getSubgraphConfig(event.chainId);
+  const factoryAddress = subgraphConfig.factoryAddress;
 
   let [bundle, pool, factory] = await Promise.all([
     context.Bundle.get(event.chainId.toString())!,
@@ -1071,8 +1073,8 @@ CLPoolContract.Swap.loader(({ event, context }) => {
 });
 
 CLPoolContract.Swap.handlerAsync(async ({ event, context }) => {
-  const factoryAddress = getFactoryAddress(event.chainId);
   const subgraphConfig = getSubgraphConfig(event.chainId);
+  const factoryAddress = subgraphConfig.factoryAddress;
 
   const stablecoinWrappedNativePoolAddress =
     subgraphConfig.stablecoinWrappedNativePoolAddress;

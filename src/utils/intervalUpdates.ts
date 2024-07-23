@@ -94,8 +94,12 @@ export function updatePoolDayData(
       volumeToken1: ZERO_BD,
       volumeUSD: ZERO_BD,
       feesUSD: ZERO_BD,
-      feeGrowthGlobal0X128: ZERO_BI,
-      feeGrowthGlobal1X128: ZERO_BI,
+      feeGrowthGlobal0X128: feeGrowthGlobal0X128
+        ? feeGrowthGlobal0X128
+        : ZERO_BI,
+      feeGrowthGlobal1X128: feeGrowthGlobal1X128
+        ? feeGrowthGlobal1X128
+        : ZERO_BI,
       txCount: ZERO_BI,
       openPrice: pool.token0Price,
       high: pool.token0Price,

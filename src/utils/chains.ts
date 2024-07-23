@@ -292,42 +292,22 @@ export function getSubgraphConfig(chainId: number): SubgraphConfig {
     };
   } else if (chainId == OPTIMISM_MAINNET_ID) {
     return {
-      factoryAddress: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+      factoryAddress: "0xCc0bDDB707055e04e497aB22a59c2aF4391cd12F",
       stablecoinWrappedNativePoolAddress:
-        "0x03af20bdaaffb4cc0a521796a223f7d85e2aac31", // DAI-WETH 0.3% pool
-      stablecoinIsToken0: false,
+        "0x478946BcD4a5a22b316470F5486fAfb928C0bA25", // USDC-WETH pool
+      stablecoinIsToken0: true,
       wrappedNativeAddress: "0x4200000000000000000000000000000000000006", // WETH
-      minimumNativeLocked: BigDecimal("10"),
+      minimumNativeLocked: BigDecimal("1"),
       stablecoinAddresses: [
-        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1", // DAI
-        "0x7f5c764cbc14f9669b88837ca1490cca17c31607", // USDC
-        "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58", // USDT
+        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // USDC
       ],
       whitelistTokens: [
         "0x4200000000000000000000000000000000000006", // WETH
-        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1", // DAI
-        "0x7f5c764cbc14f9669b88837ca1490cca17c31607", // USDC
-        "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58", // USDT
-        "0x4200000000000000000000000000000000000042", // OP
-        "0x9e1028f5f1d5ede59748ffcee5532509976840e0", // PERP
-        "0x50c5725949a6f0c72e6c4a641f24049a917db0cb", // LYRA
-        "0x68f180fcce6836688e9084f035309e29bf0a2095", // WBTC
+        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // USDC
       ],
-      tokenOverrides: [
-        {
-          address: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
-          symbol: "WETH",
-          name: "Wrapped Ethereum",
-          decimals: 18,
-        },
-      ],
-      poolsToSkip: [
-        "0x282b7d6bef6c78927f394330dca297eca2bd18cd",
-        "0x5738de8d0b864d5ef5d65b9e05b421b71f2c2eb4",
-        "0x5500721e5a063f0396c5e025a640e8491eb89aac",
-        "0x1ffd370f9d01f75de2cc701956886acec9749e80",
-      ],
-      poolMappings: OPTIMISM_POOL_MAPPINGS,
+      tokenOverrides: STATIC_TOKEN_DEFINITIONS[OPTIMISM_MAINNET_ID],
+      poolsToSkip: [],
+      poolMappings: [],
     };
   } else {
     throw new Error("Unsupported Network");

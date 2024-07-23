@@ -120,6 +120,23 @@ export const STATIC_TOKEN_DEFINITIONS_BASE: Array<StaticTokenDefinition> = [
   },
 ];
 
+export const STATIC_TOKEN_DEFINITIONS_OPTIMISM: Array<StaticTokenDefinition> = [
+  {
+    address: "0x4200000000000000000000000000000000000006",
+    symbol: "WETH",
+    name: "Wrapped Ether",
+    decimals: 18,
+    totalSupply: BigInt("40116557382468735267892"),
+  },
+  {
+    address: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+    symbol: "USDC",
+    name: "USD Coin",
+    decimals: 6,
+    totalSupply: BigInt("186306006432730"),
+  },
+];
+
 export const STATIC_TOKEN_DEFINITIONS: {
   [key in keyof typeof publicClients]: Array<StaticTokenDefinition>;
 } = {
@@ -130,5 +147,5 @@ export const STATIC_TOKEN_DEFINITIONS: {
   [BSC_MAINNET_ID]: STATIC_TOKEN_DEFINITIONS_ETH,
   [CELO_MAINNET_ID]: STATIC_TOKEN_DEFINITIONS_ETH,
   [MATIC_MAINNET_ID]: STATIC_TOKEN_DEFINITIONS_ETH,
-  [OPTIMISM_MAINNET_ID]: STATIC_TOKEN_DEFINITIONS_ETH,
+  [OPTIMISM_MAINNET_ID]: STATIC_TOKEN_DEFINITIONS_OPTIMISM,
 };
